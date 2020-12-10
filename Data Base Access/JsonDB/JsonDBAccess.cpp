@@ -4,7 +4,6 @@
 
 #include "JsonDBAccess.h"
 #include "../../BaseClasses/Header/Trip.h"
-#include "../../BaseClasses/Header/People.h"
 
 vector<Trip> JsonDBAccess::selectTrip(int idTrip) {
     return vector<Trip>();

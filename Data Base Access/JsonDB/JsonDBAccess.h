@@ -29,7 +29,7 @@ public:
 
     vector<Driver> selectDriver(int idDriver) override; //passport
 
-    virtual void insertDriver(Driver newDriver);
+    void insertDriver(Driver newDriver) override;
 
     virtual void deleteDriver(int idDriver);
 
