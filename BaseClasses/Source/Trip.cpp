@@ -6,8 +6,10 @@
 
 #include <utility>
 
-Trip::Trip(string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime, const Bus &bus)
-        : _placeOfDeparture(std::move(placeOfDeparture)),
+Trip::Trip(int id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
+           const Bus &bus)
+        : _id(id),
+          _placeOfDeparture(std::move(placeOfDeparture)),
           _placeOfArrival(std::move(placeOfArrival)),
           _departureTime(departureTime),
           _arrivalTime(arrivalTime),
@@ -21,6 +23,10 @@ Trip::Trip(const Trip &oldTrip) {
     this->_arrivalTime = time_t(oldTrip._arrivalTime);
     this->_status = oldTrip._status;
     this->_bus = Bus(oldTrip._bus);
+}
+
+int Trip::getId() const {
+    return _id;
 }
 
 time_t Trip::getDepartureTime() const {

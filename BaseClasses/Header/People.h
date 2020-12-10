@@ -1,13 +1,12 @@
 //
 // Created by abmkrtchyan on 02.12.20.
 //
-#include <string>
-
-using std::string;
-
 #ifndef BUS_RESEVATION_SYSTEM_PEOPLE_H
 #define BUS_RESEVATION_SYSTEM_PEOPLE_H
 
+#include <string>
+
+using std::string;
 
 class People {
 private:
@@ -15,6 +14,7 @@ private:
     int _id;//passport
 public:
     People();
+
     People(string name, int passportNumber);
 
     People(const People &oldPeople);

@@ -1,17 +1,12 @@
-#include <iostream>
-#include "Header/Driver.h"
+#include "iostream"
+#include "UserAPI/Header/MainFunctions.h"
 
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    MainFunctions::beginPrint();
+    int answer;
+    std::cin >> answer;
+    People *people = MainFunctions::logOrReg(answer);
 
-    Driver *x = new Driver("Valod", 10, 20);
-    std::cout << x->getName() << std::endl;
-
-    struct tm *ptr;
-    time_t It;
-    It = time(nullptr);
-    ptr = localtime(&It);
-    printf("%s", asctime(ptr));
-    (x->getName() != "Valod") ? (std::cout << 1 << std::endl) : std::cout << 2;
+    printf("Hi, %s!\n", people->getName().c_str());
     return 0;
 }

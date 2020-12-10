@@ -15,6 +15,7 @@ class Trip {
         planned, inProgress, finished
     };
 private:
+    int _id = 0;
     time_t _departureTime;
     time_t _arrivalTime;
     string _placeOfDeparture;
@@ -24,9 +25,12 @@ private:
 public:
     Trip();
 
-    Trip(string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime, const Bus &bus);
+    Trip(int id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
+         const Bus &bus);
 
     Trip(const Trip &oldTrip);
+
+    int getId() const;
 
     time_t getDepartureTime() const;
 

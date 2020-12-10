@@ -7,7 +7,7 @@
 #include <utility>
 
 People::People() {
-    _name = nullptr;
+    _name = "";
     _id = 0;
 }
 
