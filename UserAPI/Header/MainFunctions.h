@@ -7,9 +7,11 @@
 
 #include <vector>
 #include <cstdio>
+#include <iostream>
 #include "../../BaseClasses/Header/People.h"
 #include "../../BaseClasses/Header/Trip.h"
 
+extern People *people;
 using std::vector;
 
 class MainFunctions {
@@ -24,15 +26,17 @@ public :
 
     static People *signUp();
 
-    static void mainOptions(int answer);
+    static void mainOptions();
 
     static void selectTrip();
 
-    static void reserveSeat();
+    static void enterTripId();
 
     static void becomeDriver();
 
-    static void printTripsInfo(vector<Trip> trips);
+    static void reserveSeat();
+
+    static int chooseSeatNumber();
 };
 
 #endif //BUS_RESEVATION_SYSTEM_MAINFUNCTIONS_H

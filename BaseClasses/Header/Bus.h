@@ -30,15 +30,15 @@ class Bus {
 
 private:
     string _licensePlate;
-    int _busNumber;
+    int _freeSeatCount;
     int _numberOfPassengers;
     Seat *_seats;
-    Driver _driver;
+    Driver *_driver;
     bool _isFree; //bus
 public:
     Bus();
 
-    Bus(string licensePlate, int numberOfPassengers, int busNumber, const Driver &driver);
+    Bus(string licensePlate, int numberOfPassengers, Driver *driver);
 
     Bus(const Bus &oldBus);
 
@@ -46,15 +46,15 @@ public:
 
     void setLicensePlate(string newPlate);
 
-    int getBusNumber() const;
+    int getFreeSeatCount() const;
 
-    void setBusNumber(int newBusNumber);
+    void setFreeSeatCount(int newCount);
 
     int getNumberOfPassengers() const;
 
     void setNumberOfPassengers(int newCount);
 
-    Driver getDriver() const;
+    Driver *getDriver() const;
 
     void setDriver(const Driver &newDriver);
 
@@ -62,7 +62,11 @@ public:
 
     void setFree(bool x);
 
+    void print();
+
     ~Bus();
+
+    bool reserveSeat(int seatNumber, People *people);
 };
 
 

@@ -8,12 +8,12 @@
 
 People::People() {
     _name = "";
-    _id = 0;
+    _id = "";
 }
 
-People::People(string name, int passportNumber) {
+People::People(string name, string passportNumber) {
     _name = std::move(name);
-    _id = passportNumber;
+    _id = std::move(passportNumber);
 }
 
 People::People(const People &oldPeople) {

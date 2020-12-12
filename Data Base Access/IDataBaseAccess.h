@@ -14,13 +14,13 @@ using std::vector;
 
 class IDataBaseAccess {
 public:
-    virtual vector<Trip> selectTrip(int idTrip) = 0;
+    virtual Trip *selectTrip(int idTrip) = 0;
 
-    virtual vector<Trip> selectTrip(string _placeOfDeparture = "", string _placeOfArrival = "") = 0;
+    virtual vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival = "") = 0;
 
     virtual vector<Trip> selectTrip() = 0;
 
-    virtual void insertTrip(Trip newTrip) = 0;
+    virtual bool insertTrip(Trip newTrip) = 0;
 
     virtual void deleteTrip(int idTrip) = 0;
 
@@ -44,7 +44,7 @@ public:
 
     virtual vector<Bus> selectBus(bool freeBuses) = 0;
 
-    virtual void insertBus(Bus newBus) = 0;
+    virtual bool insertBus(Bus newBus) = 0;
 
     virtual void deleteBus(int licensePlateBus) = 0;
 

@@ -11,13 +11,13 @@
 
 class JsonDBAccess : public IDataBaseAccess {
 public:
-    virtual vector<Trip> selectTrip(int idTrip);
+    virtual Trip *selectTrip(int idTrip);
 
-    virtual vector<Trip> selectTrip(string _placeOfDeparture = "", string _placeOfArrival = "");
+    virtual vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival = "");
 
     virtual vector<Trip> selectTrip();
 
-    virtual void insertTrip(Trip newTrip);
+    virtual bool insertTrip(Trip newTrip);
 
     virtual void deleteTrip(int idTrip);
 
@@ -41,7 +41,7 @@ public:
 
     virtual vector<Bus> selectBus(bool freeBuses);
 
-    virtual void insertBus(Bus newBus);
+    virtual bool insertBus(Bus newBus);
 
     virtual void deleteBus(int licensePlateBus);
 

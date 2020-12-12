@@ -10,7 +10,8 @@ Driver::Driver() {
     _driversLicense = 0;
 }
 
-Driver::Driver(string name, int passportNumber, int driversLicense) : People(std::move(name), passportNumber) {
+Driver::Driver(string name, string passportNumber, int driversLicense) : People(std::move(name),
+                                                                                std::move(passportNumber)) {
     _driversLicense = driversLicense;
 }
 

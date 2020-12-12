@@ -11,11 +11,11 @@ using std::string;
 class People {
 private:
     string _name;
-    int _id;//passport
+    string _id;//passport
 public:
     People();
 
-    People(string name, int passportNumber);
+    People(string name, string passportNumber);
 
     People(const People &oldPeople);
 

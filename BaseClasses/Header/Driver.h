@@ -13,7 +13,7 @@ private:
 public:
     Driver();
 
-    Driver(string name, int passportNumber, int driversLicense = 0);
+    Driver(string name, string passportNumber, int driversLicense = 0);
 
     Driver(const Driver &oldDriver);
 

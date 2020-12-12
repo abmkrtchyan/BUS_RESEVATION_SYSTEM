@@ -5,8 +5,8 @@
 #include "JsonDBAccess.h"
 #include "../../BaseClasses/Header/Trip.h"
 
-vector<Trip> JsonDBAccess::selectTrip(int idTrip) {
-    return vector<Trip>();
+Trip *JsonDBAccess::selectTrip(int idTrip) {
+    return nullptr;
 }
 
 vector<Trip> JsonDBAccess::selectTrip(string _placeOfDeparture, string _placeOfArrival) {
@@ -17,8 +17,8 @@ vector<Trip> JsonDBAccess::selectTrip() {
     return vector<Trip>();
 }
 
-void JsonDBAccess::insertTrip(Trip newTrip) {
-
+bool JsonDBAccess::insertTrip(Trip newTrip) {
+    return true;
 }
 
 void JsonDBAccess::deleteTrip(int idTrip) {
@@ -30,7 +30,8 @@ void JsonDBAccess::updateTrip(int idTrip, Trip newTrip) {
 }
 
 People *JsonDBAccess::selectPeople(int passportNum) {
-    return nullptr;
+    People *driver = new Driver("Abo", "1234", 5678);;
+    return driver;
 }
 
 void JsonDBAccess::insertPeople(People newPeople) {
@@ -65,8 +66,8 @@ vector<Bus> JsonDBAccess::selectBus(bool freeBuses) {
     return vector<Bus>();
 }
 
-void JsonDBAccess::insertBus(Bus newBus) {
-
+bool JsonDBAccess::insertBus(Bus newBus) {
+    return true;
 }
 
 void JsonDBAccess::deleteBus(int licensePlateBus) {
