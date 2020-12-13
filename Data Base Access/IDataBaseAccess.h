@@ -32,7 +32,7 @@ public:
 
     virtual vector<Driver> selectDriver(int idDriver = 0) = 0; //passport
 
-    virtual void insertDriver(Driver newDriver) = 0;
+    virtual bool insertDriver(Driver newDriver) = 0;
 
     virtual void deleteDriver(int idDriver) = 0;
 

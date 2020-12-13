@@ -9,17 +9,17 @@
 
 class Driver : public People {
 private:
-    int _driversLicense;
+    string _driversLicense;
 public:
     Driver();
 
-    Driver(string name, string passportNumber, int driversLicense = 0);
+    Driver(string name, string passportNumber, string driversLicense = "");
 
     Driver(const Driver &oldDriver);
 
-    int getDriversLicense() const;
+    string getDriversLicense() const;
 
-    void setDriversLicense(int newDriversLicense);
+    void setDriversLicense(string newDriversLicense);
 
     ~Driver();
 };

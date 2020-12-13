@@ -30,7 +30,7 @@ void JsonDBAccess::updateTrip(int idTrip, Trip newTrip) {
 }
 
 People *JsonDBAccess::selectPeople(int passportNum) {
-    People *driver = new Driver("Abo", "1234", 5678);;
+    People *driver = new Driver("Abo", "1234", "5678");;
     return driver;
 }
 
@@ -42,8 +42,8 @@ vector<Driver> JsonDBAccess::selectDriver(int idDriver) {
     return vector<Driver>();
 }
 
-void JsonDBAccess::insertDriver(Driver newDriver) {
-
+bool JsonDBAccess::insertDriver(Driver newDriver) {
+    return true;
 }
 
 void JsonDBAccess::deleteDriver(int idDriver) {

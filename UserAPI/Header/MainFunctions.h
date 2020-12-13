@@ -37,6 +37,14 @@ public :
     static void reserveSeat();
 
     static int chooseSeatNumber();
+
+    static void printDriverTools();
+
+    static void driverTools();
+
+    static void registerTrip();
+
+    static void manageTrip();
 };
 
 #endif //BUS_RESEVATION_SYSTEM_MAINFUNCTIONS_H

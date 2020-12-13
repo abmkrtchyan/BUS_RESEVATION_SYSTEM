@@ -11,7 +11,7 @@ using std::string;
 class People {
 private:
     string _name;
-    string _id;//passport
+    string _passportId;//passport
 public:
     People();
 
@@ -22,6 +22,8 @@ public:
     virtual string getName() const;
 
     virtual void setName(string newName);
+
+    virtual string getPassportId() const;
 
     virtual ~People();
 };

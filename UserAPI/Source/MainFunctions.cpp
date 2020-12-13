@@ -5,6 +5,8 @@
 #include "../Header/MainFunctions.h"
 #include <iostream>
 #include "../../Data Base Access/JsonDB/JsonDBAccess.h"
+#include <ctime>
+#include <iomanip>
 
 People *people = nullptr;
 
@@ -25,8 +27,31 @@ void MainFunctions::mainOptionsPrint() {
     MainFunctions::mainOptions();
 }
 
+void MainFunctions::mainOptions() {
+    int answer = 0;
+    std::cin >> answer;
+    switch (answer) {
+        case 1: //Select a trip
+            selectTrip();
+            break;
+        case 2: //Reserve seat on the bus
+            enterTripId();
+            break;
+        case 3: //Become a driver
+            becomeDriver();
+            break;
+        case 0: //Exit
+            exit(0);
+        default:
+            printf("%s\n", "Incorrect choice. Please select again");
+            std::cin >> answer;
+            mainOptions();
+            break;
+    }
+}
+
 People *MainFunctions::logOrReg(int answer) {
-    People *people = nullptr;
+    people = nullptr;
     switch (answer) {
         case 1:
             people = login();
@@ -71,28 +96,6 @@ People *MainFunctions::signUp() {
     return people;
 }
 
-void MainFunctions::mainOptions() {
-    int answer = 0;
-    std::cin >> answer;
-    switch (answer) {
-        case 1: //Select a trip
-            selectTrip();
-            break;
-        case 2: //Reserve seat on the bus
-            enterTripId();
-            break;
-        case 3: //Become a driver
-            becomeDriver();
-            break;
-        case 0: //Exit
-            exit(0);
-        default:
-            printf("%s\n", "Incorrect choice. Please select again");
-            std::cin >> answer;
-            mainOptions();
-            break;
-    }
-}
 
 void MainFunctions::selectTrip() {
     printf("\e[1;1H\e[2J If you want to see everything, enter 1, otherwise 0 :-> "); //clean console
@@ -153,10 +156,6 @@ void MainFunctions::enterTripId() {
     }
 }
 
-void MainFunctions::becomeDriver() {
-
-}
-
 void MainFunctions::reserveSeat() {
     printf("\n%s", "Enter trip ID:-> ");
     int answer;
@@ -175,7 +174,7 @@ void MainFunctions::reserveSeat() {
                 Trip::printTripsInfo(trip);
                 bus->print();
             }
-        };
+        }
     } else {
         printf("\nTrip by id = %d, does not exist\n", answer);
         enterTripId();
@@ -211,6 +210,105 @@ int MainFunctions::chooseSeatNumber() {
                 std::cin >> choice;
         }
     }
+}
+
+void MainFunctions::becomeDriver() {
+    printf("\e[1;1H\e[2J");
+    printf("Pleas enter your driver's license number:--> ");
+    string answer;
+    std::cin >> answer;
+    auto *driver = new Driver(people->getName(), people->getPassportId(), answer);
+    people = driver;
+    JsonDBAccess dbAccess;
+    if (dbAccess.insertDriver(*driver)) {
+        printDriverTools();
+    } else {
+        printf("\n%s\n", "The attempt failed, please check the accuracy of the data and try again later");
+        mainOptionsPrint();
+    }
+}
+
+void MainFunctions::printDriverTools() {
+    printf("\e[1;1H\e[2J");
+    printf("1. %s\n", "Register a new trip.");
+    printf("2. %s\n", "Manage registered trips.");
+    printf("3. %s\n", "Bask.");
+    printf("0. %s\n", "Exit.");
+    printf("%s:-> ", "Choose an option");
+
+    driverTools();
+}
+
+void MainFunctions::driverTools() {
+    int answer;
+    while (true) {
+        std::cin >> answer;
+        switch (answer) {
+            case 1:
+                registerTrip();
+                return;
+            case 2:
+                manageTrip();
+                return;
+            case 3:
+                mainOptionsPrint(); //Back
+                return;
+            case 4:
+                exit(0); // Exit
+            default:
+                printf("%s\n:--> ", "Incorrect choice. Please select again");
+                break;
+        }
+    }
+}
+
+void MainFunctions::registerTrip() {
+    printf("\e[1;1H\e[2J");
+    printf("Enter the bus license plate:--> ");
+    string licensePlate;
+    std::cin >> licensePlate;
+    printf("\nEnter the number of passenger seats:--> ");
+    int numPasSeat;
+    std::cin >> numPasSeat;
+    printf("Enter the name of the starting point of the route:--> ");
+    auto *driver = dynamic_cast<Driver *>(people);
+    Bus *bus = new Bus(licensePlate, numPasSeat, driver);
+
+    string placeOfDeparture;
+    std::cin >> placeOfDeparture;
+    printf("Enter the name of the destination of the route:--> ");
+    string placeOfArrival;
+    std::cin >> placeOfArrival;
+    printf("\nEnter the start time of the trip in the format 'HH:MM DD.MM.YYYY':--> ");
+    struct std::tm timeInfo;
+    std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
+    while (std::cin.fail()) {
+        std::cout << "Error reading time\nEnter again:--> ";
+        std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // HH:MM DD:MM:YYYY
+    }
+    time_t departureTime = mktime(&timeInfo);
+
+    printf("\nEnter the arrival time of the trip in the format 'HH:MM' DD.MM.YYYY:--> ");
+    std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
+    while (std::cin.fail()) {
+        std::cout << "Error reading time\nEnter again:--> ";
+        std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // MM:HH DD:MM:YYYY
+    }
+    time_t arrivalTime = mktime(&timeInfo);
+
+    Trip *trip = new Trip(0, placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
+    JsonDBAccess dbAccess;
+    if (dbAccess.insertTrip(*trip)) {
+        printf("\nTrip registered!");
+    } else {
+        printf("\nRegistration error, please try again.");
+        std::cin.get();
+        printDriverTools();
+    }
+}
+
+void MainFunctions::manageTrip() {
+
 }
 
 
