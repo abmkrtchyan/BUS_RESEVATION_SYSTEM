@@ -12,7 +12,7 @@ int main() {
     while (true) {
         MainFunctions::mainOptionsPrint();
         People *driver = new Driver("Abo", "1234", "5678");
+    }
     return 0;
 }
-    }
 

@@ -44,7 +44,7 @@ public :
 
     static void registerTrip();
 
-    static void manageTrip();
+    static void showMyTrip();
 };
 
 #endif //BUS_RESEVATION_SYSTEM_MAINFUNCTIONS_H

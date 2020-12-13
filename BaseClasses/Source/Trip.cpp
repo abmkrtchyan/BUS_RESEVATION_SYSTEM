@@ -78,7 +78,7 @@ Bus *Trip::getBus() const {
     return _bus;
 }
 
-void Trip::printTripsInfo(const Trip *trip) {
+void Trip::printTripInfo(const Trip *trip) {
     if (trip != nullptr) {
         int id = trip->getId();
         string status = trip->getStatus();

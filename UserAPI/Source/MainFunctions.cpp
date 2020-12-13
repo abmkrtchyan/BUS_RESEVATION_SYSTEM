@@ -76,7 +76,7 @@ People *MainFunctions::logOrReg(int answer) {
 People *MainFunctions::login() {
     printf("\e[1;1H\e[2J");
     printf("%s:", " Please, enter your passport number");
-    int passportNum;
+    string passportNum;
     std::cin >> passportNum;
     JsonDBAccess dbAccess;
     return dbAccess.selectPeople(passportNum);
@@ -119,7 +119,7 @@ void MainFunctions::selectTrip() {
     string placeOfArrival;
     std::cin >> placeOfArrival;
     if (tripId > 0)
-        Trip::printTripsInfo(dbAccess.selectTrip(tripId));
+        Trip::printTripInfo(dbAccess.selectTrip(tripId));
     else Trip::printTripsInfo(dbAccess.selectTrip(placeOfDeparture, placeOfArrival));
     printf("\n\n\n");
     mainOptionsPrint();
@@ -163,7 +163,7 @@ void MainFunctions::reserveSeat() {
     JsonDBAccess dbAccess;
     Trip *trip = dbAccess.selectTrip(answer);
     if (trip != nullptr) {
-        Trip::printTripsInfo(trip);
+        Trip::printTripInfo(trip);
         Bus *bus = trip->getBus();
         bus->print();
         int seatNumber = chooseSeatNumber();
@@ -171,7 +171,7 @@ void MainFunctions::reserveSeat() {
             if (dbAccess.insertTrip(*trip)) {
                 printf("\e[1;1H\e[2J");
                 printf("\n Seat with number N%d reserved!\n", seatNumber);
-                Trip::printTripsInfo(trip);
+                Trip::printTripInfo(trip);
                 bus->print();
             }
         }
@@ -248,7 +248,7 @@ void MainFunctions::driverTools() {
                 registerTrip();
                 return;
             case 2:
-                manageTrip();
+                showMyTrip();
                 return;
             case 3:
                 mainOptionsPrint(); //Back
@@ -270,47 +270,57 @@ void MainFunctions::registerTrip() {
     printf("\nEnter the number of passenger seats:--> ");
     int numPasSeat;
     std::cin >> numPasSeat;
-    printf("Enter the name of the starting point of the route:--> ");
+    printf("\nEnter the name of the starting point of the route:--> ");
     auto *driver = dynamic_cast<Driver *>(people);
     Bus *bus = new Bus(licensePlate, numPasSeat, driver);
 
     string placeOfDeparture;
     std::cin >> placeOfDeparture;
-    printf("Enter the name of the destination of the route:--> ");
+    printf("\nEnter the name of the destination of the route:--> ");
     string placeOfArrival;
     std::cin >> placeOfArrival;
     printf("\nEnter the start time of the trip in the format 'HH:MM DD.MM.YYYY':--> ");
-    struct std::tm timeInfo;
+    struct std::tm timeInfo{};
     std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
-    while (std::cin.fail()) {
-        std::cout << "Error reading time\nEnter again:--> ";
-        std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // HH:MM DD:MM:YYYY
+    if (std::cin.fail()) {
+        std::cout << "\nError reading time\nEnter again:--> ";
+        exit(1);
     }
     time_t departureTime = mktime(&timeInfo);
 
     printf("\nEnter the arrival time of the trip in the format 'HH:MM' DD.MM.YYYY:--> ");
     std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
-    while (std::cin.fail()) {
+    if (std::cin.fail()) {
         std::cout << "Error reading time\nEnter again:--> ";
-        std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // MM:HH DD:MM:YYYY
+        exit(1);
+
+        //std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // MM:HH DD:MM:YYYY
     }
     time_t arrivalTime = mktime(&timeInfo);
 
     Trip *trip = new Trip(0, placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
     JsonDBAccess dbAccess;
     if (dbAccess.insertTrip(*trip)) {
-        printf("\nTrip registered!");
+        printf("\nTrip registered!\n");
+        printDriverTools();
     } else {
-        printf("\nRegistration error, please try again.");
+        printf("\nRegistration error, please try again.\n");
         std::cin.get();
         printDriverTools();
     }
 }
 
-void MainFunctions::manageTrip() {
-
+void MainFunctions::showMyTrip() {
+    printf("\e[1;1H\e[2J");
+    JsonDBAccess dbAccess;
+    auto *driver = dynamic_cast<Driver *>(people);
+    vector<Trip> trips = dbAccess.selectTrip(driver->getDriversLicense());
+    for (const auto &trip:trips) {
+        Trip::printTripInfo(&trip);
+        trip.getBus()->printAll();
+        printf("\n\n");
+    }
 }
-
 
 
 

@@ -64,9 +64,12 @@ public:
 
     void print();
 
+    void printAll();
+
     ~Bus();
 
     bool reserveSeat(int seatNumber, People *people);
+
 };
 
 

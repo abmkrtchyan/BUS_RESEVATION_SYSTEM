@@ -92,6 +92,23 @@ void Bus::print() {
     }
 }
 
+void Bus::printAll() {
+    printf("\n%s:\n", "Printing bus information");
+    printf("%-30s %-15s \n", "Licence plate number: --> ", _licensePlate.c_str());
+    printf("%-30s %-15s \n", "Driver name: --> ", _driver->getName().c_str());
+    printf("%-30s %-8d \n", "Number of passengers: --> ", _numberOfPassengers);
+    printf("%-30s %-8d \n\n", "Free Seat count: --> ", _freeSeatCount);
+    printf("%-30s\n", "Seat: ");
+    printf("%-12s %-12s %-20s %-20s\n", "SEAT NUMBER", "STATUS", "PEOPLE PASSPORT", "NAME");
+
+    for (int i = 0; i < _numberOfPassengers; ++i) {
+        printf("%-12d %-12s %-20s %-20s\n", _seats[i]._seatNumber,
+               _seats->_isFree ? "Free" : "Busy",
+               _seats[i]._people->getPassportId().c_str(),
+               _seats->_people->getName().c_str());
+    }
+}
+
 bool Bus::reserveSeat(int seatNumber, People *people) {
     if (seatNumber > 0 && seatNumber <= _numberOfPassengers && _seats[seatNumber + 1]._isFree) {
         _seats[seatNumber + 1]._isFree = false;

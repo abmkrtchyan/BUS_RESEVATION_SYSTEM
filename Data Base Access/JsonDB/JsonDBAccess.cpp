@@ -13,6 +13,11 @@ vector<Trip> JsonDBAccess::selectTrip(string _placeOfDeparture, string _placeOfA
     return vector<Trip>();
 }
 
+vector<Trip> JsonDBAccess::selectTrip(string driverLicenseNumber) {
+    return vector<Trip>();
+}
+
+
 vector<Trip> JsonDBAccess::selectTrip() {
     return vector<Trip>();
 }
@@ -29,8 +34,8 @@ void JsonDBAccess::updateTrip(int idTrip, Trip newTrip) {
 
 }
 
-People *JsonDBAccess::selectPeople(int passportNum) {
-    People *driver = new Driver("Abo", "1234", "5678");;
+People *JsonDBAccess::selectPeople(string passportNum) {
+    People *driver = new Driver("Abo", "1234", "5678");
     return driver;
 }
 

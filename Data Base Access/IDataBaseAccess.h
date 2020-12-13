@@ -20,13 +20,15 @@ public:
 
     virtual vector<Trip> selectTrip() = 0;
 
+    virtual vector<Trip> selectTrip(string driverLicenseNumber) = 0;
+
     virtual bool insertTrip(Trip newTrip) = 0;
 
     virtual void deleteTrip(int idTrip) = 0;
 
     virtual void updateTrip(int idTrip, Trip newTrip) = 0;
 
-    virtual People *selectPeople(int passportNum) = 0;
+    virtual People *selectPeople(string passportNum) = 0;
 
     virtual void insertPeople(People newPeople) = 0;
 

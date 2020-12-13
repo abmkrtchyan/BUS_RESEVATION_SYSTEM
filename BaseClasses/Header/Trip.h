@@ -53,7 +53,7 @@ public:
 
     static void printTripsInfo(const std::vector<Trip> &trips);
 
-    static void printTripsInfo(const Trip *trip);
+    static void printTripInfo(const Trip *trip);
 
     ~Trip();
 

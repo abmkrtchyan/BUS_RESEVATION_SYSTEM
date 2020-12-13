@@ -11,42 +11,43 @@
 
 class JsonDBAccess : public IDataBaseAccess {
 public:
-    virtual Trip *selectTrip(int idTrip);
+    Trip *selectTrip(int idTrip) override;
 
-    virtual vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival = "");
+    vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival) override;
 
-    virtual vector<Trip> selectTrip();
+    vector<Trip> selectTrip() override;
 
-    virtual bool insertTrip(Trip newTrip);
+    vector<Trip> selectTrip(string driverLicenseNumber) override;
 
-    virtual void deleteTrip(int idTrip);
+    bool insertTrip(Trip newTrip) override;
 
-    virtual void updateTrip(int idTrip, Trip newTrip);
+    void deleteTrip(int idTrip) override;
 
-    People *selectPeople(int passportNum) override; //passport
+    void updateTrip(int idTrip, Trip newTrip) override;
 
-    virtual void insertPeople(People newPeople);
+    People *selectPeople(string passportNum) override; //passport
+
+    void insertPeople(People newPeople) override;
 
     vector<Driver> selectDriver(int idDriver) override; //passport
 
     bool insertDriver(Driver newDriver) override;
 
-    virtual void deleteDriver(int idDriver);
+    void deleteDriver(int idDriver) override;
 
-    virtual void updateDriver(int idDriver, Driver newDriver);
+    void updateDriver(int idDriver, Driver newDriver) override;
 
-    virtual vector<Bus> selectBus(int licensePlate);
+    vector<Bus> selectBus(int licensePlate) override;
 
-    virtual vector<Bus> selectBus(int maxNumberOfPassengers, int minNumberOfPassengers = 0);
+    vector<Bus> selectBus(int maxNumberOfPassengers, int minNumberOfPassengers) override;
 
-    virtual vector<Bus> selectBus(bool freeBuses);
+    vector<Bus> selectBus(bool freeBuses) override;
 
-    virtual bool insertBus(Bus newBus);
+    bool insertBus(Bus newBus) override;
 
-    virtual void deleteBus(int licensePlateBus);
+    void deleteBus(int licensePlateBus) override;
 
-    virtual void updateBus(int licensePlateBus, Bus newBus);
-
+    void updateBus(int licensePlateBus, Bus newBus) override;
 
 };
 
