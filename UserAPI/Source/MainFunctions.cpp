@@ -298,7 +298,7 @@ void MainFunctions::registerTrip() {
     }
     time_t arrivalTime = mktime(&timeInfo);
 
-    Trip *trip = new Trip(0, placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
+    Trip *trip = new Trip("NULL", placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
     JsonDBAccess dbAccess;
     if (dbAccess.insertTrip(*trip)) {
         printf("\nTrip registered!\n");

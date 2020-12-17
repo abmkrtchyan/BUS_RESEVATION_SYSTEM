@@ -32,15 +32,15 @@ public:
 
     virtual void insertPeople(People newPeople) = 0;
 
-    virtual vector<Driver> selectDriver(int idDriver = 0) = 0; //passport
+    virtual vector<Driver> selectDriver(string idDriver) = 0; //passport
 
     virtual bool insertDriver(Driver newDriver) = 0;
 
-    virtual void deleteDriver(int idDriver) = 0;
+    virtual void deleteDriver(string idDriver) = 0;
 
-    virtual void updateDriver(int idDriver, Driver newDriver) = 0;
+    virtual void updateDriver(string idDriver, Driver newDriver) = 0;
 
-    virtual vector<Bus> selectBus(int licensePlate) = 0;
+    virtual vector<Bus> selectBus(string licensePlate) = 0;
 
     virtual vector<Bus> selectBus(int maxNumberOfPassengers, int minNumberOfPassengers = 0) = 0;
 
@@ -48,9 +48,9 @@ public:
 
     virtual bool insertBus(Bus newBus) = 0;
 
-    virtual void deleteBus(int licensePlateBus) = 0;
+    virtual void deleteBus(string licensePlateBus) = 0;
 
-    virtual void updateBus(int licensePlateBus, Bus newBus) = 0;
+    virtual void updateBus(string licensePlateBus, Bus newBus) = 0;
 
     virtual ~IDataBaseAccess() {};
 };

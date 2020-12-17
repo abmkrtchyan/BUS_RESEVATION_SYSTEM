@@ -5,16 +5,18 @@
 #include "../Header/Trip.h"
 #include <utility>
 
-Trip::Trip(int id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime, Bus *bus)
-        : _id(id),
+Trip::Trip(string id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime, Bus *bus,
+           const string &status)
+        : _id(std::move(id)),
           _placeOfDeparture(std::move(placeOfDeparture)),
           _placeOfArrival(std::move(placeOfArrival)),
           _departureTime(departureTime),
           _arrivalTime(arrivalTime),
           _bus(bus),
-          _status(planned) {}
+          _status(returnStatus(status)) {}
 
 Trip::Trip(const Trip &oldTrip) {
+    this->_id = oldTrip.getId();
     this->_placeOfDeparture = oldTrip._placeOfDeparture;
     this->_placeOfArrival = oldTrip._placeOfArrival;
     this->_departureTime = time_t(oldTrip._departureTime);
@@ -23,7 +25,7 @@ Trip::Trip(const Trip &oldTrip) {
     this->_bus = new Bus(*oldTrip._bus);
 }
 
-int Trip::getId() const {
+string Trip::getId() const {
     return _id;
 }
 
@@ -63,8 +65,8 @@ string Trip::getStatus() const {
     return std::string((const char *) _status);
 }
 
-void Trip::changeStatus() {
-    (planned == _status) ? _status = inProgress : _status = finished;
+void Trip::setStatus(const string &newStatus) {
+    _status = returnStatus(newStatus);
 }
 
 Trip::Trip() {
@@ -80,7 +82,7 @@ Bus *Trip::getBus() const {
 
 void Trip::printTripInfo(const Trip *trip) {
     if (trip != nullptr) {
-        int id = trip->getId();
+        string id = trip->getId();
         string status = trip->getStatus();
         string from = trip->getPlaceOfDeparture();
         string to = trip->getPlaceOfArrival();
@@ -89,14 +91,14 @@ void Trip::printTripInfo(const Trip *trip) {
         int freeSeatCount = trip->getBus()->getFreeSeatCount();
         printf("%-12s %-12s %-20s %-20s %-22s %-22s %-3s\n", "ID", "STATUS", "FROM", "TO", "DEPARTURE TIME",
                "ARRIVAL TIME", "FREE SEAT COUNT");
-        printf("%-12d %-12s %-20s %-20s %-22s %-22s %-3d\n",
-               id, status.c_str(), from.c_str(), to.c_str(), departure.c_str(), arrival.c_str(), freeSeatCount);
+        printf("%-12s %-12s %-20s %-20s %-22s %-22s %-3d\n",
+               id.c_str(), status.c_str(), from.c_str(), to.c_str(), departure.c_str(), arrival.c_str(), freeSeatCount);
     }
 }
 
-void Trip::printTripsInfo(const std::vector <Trip> &trips) {
+void Trip::printTripsInfo(const std::vector<Trip> &trips) {
     printf("\e[1;1H\e[2J");
-    int id;
+    string id;
     string status, from, to; //city
     string departure, arrival;//time
     int freeSeatCount;
@@ -110,9 +112,20 @@ void Trip::printTripsInfo(const std::vector <Trip> &trips) {
         departure = trip.getDepartureTime();
         arrival = trip.getArrivalTime();
         freeSeatCount = trip.getBus()->getFreeSeatCount();
-        printf("%-12d %-12s %-20s %-20s %-22s %-22s %-3d\n",
-               id, status.c_str(), from.c_str(), to.c_str(), departure.c_str(), arrival.c_str(), freeSeatCount);
+        printf("%-12s %-12s %-20s %-20s %-22s %-22s %-3d\n",
+               id.c_str(), status.c_str(), from.c_str(), to.c_str(), departure.c_str(), arrival.c_str(), freeSeatCount);
     }
+}
+
+Trip::Status Trip::returnStatus(const string &status) {
+    if (status == "planned")
+        return planned;
+    else if (status == "inProgress")
+        return inProgress;
+    else if (status == "finished")
+        return finished;
+    else return _status = indefinite;
+
 }
 
 Trip::~Trip() = default;

@@ -7,7 +7,7 @@
 #include <utility>
 
 Driver::Driver() {
-    _driversLicense = "";
+    _driversLicense ;
 }
 
 Driver::Driver(string name, string passportNumber, string driversLicense) : People(std::move(name),

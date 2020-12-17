@@ -1,16 +1,20 @@
 //
 // Created by abmkrtchyan on 02.12.20.
 //
-#include <string>
-#include "People.h"
-#include "Driver.h"
 
-using std::string;
 #ifndef BUS_RESEVATION_SYSTEM_BUS_H
 #define BUS_RESEVATION_SYSTEM_BUS_H
 
 
+#include <string>
+#include <map>
+#include "People.h"
+#include "Driver.h"
+
+using std::string;
+
 class Bus {
+
     struct Seat {
         int _seatNumber;
         People *_people;
@@ -34,15 +38,18 @@ private:
     int _numberOfPassengers;
     Seat *_seats;
     Driver *_driver;
-    bool _isFree; //bus
+    bool _status; //bus
 public:
     Bus();
 
     Bus(string licensePlate, int numberOfPassengers, Driver *driver);
 
+    Bus(string licensePlate, int freeSeatCount, int numberOfPassengers, Driver *driver, bool status,
+        const std::map<int, std::pair<People *, bool>> &seats);
+
     Bus(const Bus &oldBus);
 
-    string getLicensePlate();
+    string getLicensePlate() const;
 
     void setLicensePlate(string newPlate);
 
@@ -53,6 +60,8 @@ public:
     int getNumberOfPassengers() const;
 
     void setNumberOfPassengers(int newCount);
+
+    std::map<int, std::pair<string, bool>> getSeat() const;
 
     Driver *getDriver() const;
 

@@ -9,7 +9,7 @@
 Bus::Bus() {
     _freeSeatCount = 0;
     _numberOfPassengers = 0;
-    _isFree = false;
+    _status = false;
     _seats = nullptr;
     _driver = nullptr;
 }
@@ -18,17 +18,36 @@ Bus::Bus(string licensePlate, int numberOfPassengers, Driver *driver) :
         _licensePlate(std::move(licensePlate)),
         _numberOfPassengers(numberOfPassengers),
         _freeSeatCount(numberOfPassengers),
-        _isFree(true),
-        _driver(driver) {
+        _status(true) {
+    _driver = new Driver(*driver);
     _seats = new Seat[_numberOfPassengers];
     for (int i = 0; i < _numberOfPassengers; ++i) {
         _seats[i]._seatNumber = i + 1;
     }
 }
 
+Bus::Bus(string licensePlate, int freeSeatCount, int numberOfPassengers, Driver *driver, bool status,
+         const std::map<int, std::pair<People *, bool>> &seats) :
+        _licensePlate(std::move(licensePlate)),
+        _numberOfPassengers(numberOfPassengers),
+        _freeSeatCount(freeSeatCount),
+        _status(status) {
+    _driver = new Driver(*driver);
+    _seats = new Seat[_numberOfPassengers];
+    int index = 0;
+
+    for (auto &seat:seats) {
+        _seats[index]._seatNumber = seat.first;
+        _seats[index]._isFree = seat.second.second;
+        _seats[index]._people = new People(*seat.second.first);
+
+        index++;
+    }
+}
+
 Bus::Bus(const Bus &oldBus) {
     this->_numberOfPassengers = oldBus._numberOfPassengers;
-    this->_isFree = oldBus._isFree;
+    this->_status = oldBus._status;
     this->_licensePlate = oldBus._licensePlate;
     this->_freeSeatCount = oldBus._freeSeatCount;
     this->_seats = new Seat[oldBus._numberOfPassengers];
@@ -37,7 +56,7 @@ Bus::Bus(const Bus &oldBus) {
     this->_driver = new Driver(*oldBus._driver);
 }
 
-string Bus::getLicensePlate() {
+string Bus::getLicensePlate() const {
     return _licensePlate;
 }
 
@@ -71,11 +90,11 @@ void Bus::setDriver(const Driver &newDriver) {
 }
 
 void Bus::setFree(bool x) {
-    _isFree = x;
+    _status = x;
 }
 
 bool Bus::isFree() const {
-    return _isFree;
+    return _status;
 }
 
 //Printing bus information
@@ -116,6 +135,15 @@ bool Bus::reserveSeat(int seatNumber, People *people) {
         _freeSeatCount--;
         return true;
     } else return false;
+}
+
+std::map<int, std::pair<string, bool>> Bus::getSeat() const {
+    std::map<int, std::pair<string, bool>> map;
+    for (int i = 0; i < _numberOfPassengers; i++) {
+        string peopleID = _seats->_people == nullptr ? "NULL" : _seats->_people->getPassportId();
+        map[_seats[i]._seatNumber] = std::make_pair(peopleID, _seats[i]._isFree);
+    }
+    return map;
 }
 
 Bus::~Bus() = default;

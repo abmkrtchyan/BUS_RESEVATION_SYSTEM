@@ -13,10 +13,10 @@ using std::string;
 
 class Trip {
     enum Status {
-        planned, inProgress, finished
+        planned, inProgress, finished, indefinite
     };
 private:
-    int _id = 0;
+    string _id ;
     time_t _departureTime;
     time_t _arrivalTime;
     string _placeOfDeparture;
@@ -26,12 +26,12 @@ private:
 public:
     Trip();
 
-    Trip(int id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
-         Bus *bus);
+    Trip(string id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
+         Bus *bus, const string &status = "planned");
 
     Trip(const Trip &oldTrip);
 
-    int getId() const;
+    string getId() const;
 
     string getDepartureTime() const;
 
@@ -49,11 +49,13 @@ public:
 
     Bus *getBus() const;
 
-    void changeStatus();
+    void setStatus(const string &newStatus);
 
     static void printTripsInfo(const std::vector<Trip> &trips);
 
     static void printTripInfo(const Trip *trip);
+
+    Status returnStatus(const string &status);
 
     ~Trip();
 
