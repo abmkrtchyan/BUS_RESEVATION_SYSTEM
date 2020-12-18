@@ -9,4 +9,4 @@ add_executable(Bus_Resevation_System main.cpp BaseClasses/Source/People.cpp Base
         BaseClasses/Source/Bus.cpp BaseClasses/Header/Bus.h BaseClasses/Source/Driver.cpp BaseClasses/Header/Driver.h
         BaseClasses/Source/Trip.cpp BaseClasses/Header/Trip.h "Data Base Access/IDataBaseAccess.h"
         "Data Base Access/JsonDB/JsonDBAccess.cpp" "Data Base Access/JsonDB/JsonDBAccess.h"
-        UserAPI/Source/MainFunctions.cpp UserAPI/Header/MainFunctions.h)
+        UserAPI/Source/MainFunctions.cpp UserAPI/Header/MainFunctions.h nlohmann_json/include/nlohmann/json.hpp)
