@@ -1,9 +1,9 @@
 cmake_minimum_required(VERSION 3.17)
 project(Bus_Resevation_System)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 
-include_directories("nlohmann_json_cmake_fetchcontent/include")
+include_directories("nlohmann_json/include")
 
 add_executable(Bus_Resevation_System main.cpp BaseClasses/Source/People.cpp BaseClasses/Header/People.h
         BaseClasses/Source/Bus.cpp BaseClasses/Header/Bus.h BaseClasses/Source/Driver.cpp BaseClasses/Header/Driver.h

@@ -6,6 +6,7 @@
       <file path="$PROJECT_DIR$/json" />
       <file path="$PROJECT_DIR$/json/include" />
       <file path="$PROJECT_DIR$/json/include/nlohmann" />
+      <file path="$PROJECT_DIR$/nlohmann_json_cmake_fetchcontent" />
     </libraryRoots>
   </component>
 </project>
