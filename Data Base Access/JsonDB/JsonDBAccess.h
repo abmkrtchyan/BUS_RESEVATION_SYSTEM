@@ -19,13 +19,13 @@ private:
     const static char *peopleDirectoryPath;
     const static char *driverDirectoryPath;
 public:
-    Trip *selectTrip(int idTrip) override;
+    Trip *selectTrip(string idTrip) override;
 
     vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival) override;
 
     vector<Trip> selectTrip() override;
 
-    vector<Trip> selectTrip(string driverLicenseNumber) override;
+    vector<Trip> selectTripForDriver(string driverLicenseNumber) override;
 
     bool insertTrip(Trip *newTrip) override;
 
@@ -37,7 +37,7 @@ public:
 
     bool insertPeople(People *newPeople) override;
 
-    vector<Driver> selectDriver(string idDriver) override; //passport
+    Driver *selectDriver(string idDriver) override; //passport
 
     bool insertDriver(Driver *newDriver) override;
 

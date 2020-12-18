@@ -8,28 +8,52 @@
 #include <fstream>
 #include <iomanip>
 
-//auto it = std::find_if(things.begin(), things.end(), [](const Thing &t) { return t.a == 2; });
-
 const char *JsonDBAccess::tripDirectoryPath = "../JsonDB/trip.json";
 const char *JsonDBAccess::busDirectoryPath = "../JsonDB/bus.json";
 const char *JsonDBAccess::driverDirectoryPath = "../JsonDB/driver.json";
 const char *JsonDBAccess::peopleDirectoryPath = "../JsonDB/people.json";
 
-Trip *JsonDBAccess::selectTrip(int idTrip) {
+Trip *JsonDBAccess::selectTrip(string idTrip) {
+    vector<Trip> allTrip = selectTrip();
+    vector<Trip> answer;
 
-    return nullptr;
+    for (const auto &element : allTrip) {
+        if (element.getId() == idTrip) {
+            answer.push_back(element);
+        }
+    }
+    if (!answer.empty()) {
+        Trip *trip = new Trip(answer[0]);
+        return trip;
+    } else
+        return nullptr;
 }
 
-vector<Trip> JsonDBAccess::selectTrip(string _placeOfDeparture, string _placeOfArrival) {
-    return vector<Trip>();
+vector<Trip> JsonDBAccess::selectTrip(string placeOfDeparture, string placeOfArrival) {
+    vector<Trip> allTrip = selectTrip();
+    vector<Trip> answer;
+    for (const auto &element : allTrip)
+        if (element.getPlaceOfDeparture() == placeOfDeparture && (placeOfArrival.empty() ||
+                                                                  element.getPlaceOfArrival() == placeOfArrival))
+            answer.push_back(element);
+    return answer;
 }
 
-vector<Trip> JsonDBAccess::selectTrip(string driverLicenseNumber) {
-    return vector<Trip>();
+vector<Trip> JsonDBAccess::selectTripForDriver(string driverLicenseNumber) {
+    vector<Trip> allTrip = selectTrip();
+    vector<Trip> answer;
+    for (const auto &element : allTrip)
+        if (element.getBus()->getDriver()->getDriversLicense() == driverLicenseNumber)
+            answer.push_back(element);
+    return answer;
 }
 
 vector<Trip> JsonDBAccess::selectTrip() {
-    return vector<Trip>();
+    vector<Trip> answer;
+    json allJson = json::array();
+    readFromJsonFile(allJson, tripDirectoryPath);
+    tripFromJson(allJson, answer);
+    return answer;
 }
 
 bool JsonDBAccess::insertTrip(Trip *newTrip) {
@@ -39,7 +63,7 @@ bool JsonDBAccess::insertTrip(Trip *newTrip) {
     readFromJsonFile(answer, tripDirectoryPath);
     newTrip->setID(newTrip->getDepartureTime() + newTrip->getBus()->getLicensePlate());//set ID for trip
     for (const auto &element : answer) {
-        if (element["PASSPORT_ID"] == newTrip->getId())
+        if (element["ID"] == newTrip->getId())
             return false;
     }
     answer.push_back(trip);
@@ -71,8 +95,17 @@ void JsonDBAccess::updateTrip(string idTrip, Trip newTrip) {
 }
 
 People *JsonDBAccess::selectPeople(string passportNum) {
-    People *driver = new Driver("Abo", "1234", "5678");
-    return driver;
+    vector<People> allPeople;
+    json allJson = json::array();
+    readFromJsonFile(allJson, peopleDirectoryPath);
+    peopleFromJson(allJson, allPeople);
+
+    for (const auto &element : allPeople)
+        if (element.getPassportId() == passportNum) {
+            auto *people = new People(element);
+            return people;
+        }
+    return nullptr;
 }
 
 bool JsonDBAccess::insertPeople(People *newPeople) {
@@ -89,8 +122,18 @@ bool JsonDBAccess::insertPeople(People *newPeople) {
     return true;
 }
 
-vector<Driver> JsonDBAccess::selectDriver(string idDriver) {
-    return vector<Driver>();
+Driver *JsonDBAccess::selectDriver(string idDriver) {
+    vector<Driver> allDriver;
+    json allJson = json::array();
+    readFromJsonFile(allJson, driverDirectoryPath);
+    driverFromJson(allJson, allDriver);
+
+    for (const auto &element : allDriver)
+        if (element.getDriversLicense() == idDriver) {
+            auto *driver = new Driver(element);
+            return driver;
+        }
+    return nullptr;
 }
 
 bool JsonDBAccess::insertDriver(Driver *newDriver) {
@@ -131,15 +174,40 @@ void JsonDBAccess::updateDriver(string idDriver, Driver newDriver) {
 }
 
 vector<Bus> JsonDBAccess::selectBus(string licensePlate) {
-    return vector<Bus>();
+    vector<Bus> allBus;
+    vector<Bus> answer;
+    json allJson = json::array();
+    readFromJsonFile(allJson, busDirectoryPath);
+    busFromJson(allJson, allBus);
+    for (const auto &element : allBus)
+        if (element.getLicensePlate() == licensePlate)
+            answer.push_back(element);
+    return answer;
 }
 
 vector<Bus> JsonDBAccess::selectBus(int maxNumberOfPassengers, int minNumberOfPassengers) {
-    return vector<Bus>();
+    vector<Bus> allBus;
+    vector<Bus> answer;
+    json allJson = json::array();
+    readFromJsonFile(allJson, busDirectoryPath);
+    busFromJson(allJson, allBus);
+    for (const auto &element : allBus)
+        if (element.getNumberOfPassengers() <= maxNumberOfPassengers &&
+            element.getNumberOfPassengers() >= minNumberOfPassengers)
+            answer.push_back(element);
+    return answer;
 }
 
 vector<Bus> JsonDBAccess::selectBus(bool freeBuses) {
-    return vector<Bus>();
+    vector<Bus> allBus;
+    vector<Bus> answer;
+    json allJson = json::array();
+    readFromJsonFile(allJson, busDirectoryPath);
+    busFromJson(allJson, allBus);
+    for (const auto &element : allBus)
+        if (element.isFree() == freeBuses)
+            answer.push_back(element);
+    return answer;
 }
 
 bool JsonDBAccess::insertBus(Bus newBus) {
@@ -306,7 +374,7 @@ void JsonDBAccess::busFromJson(const json &jsn, vector<Bus> &busV) {
                                                                                                          seat.second.second)));
         }
 
-        driver = &(dbAccess.selectDriver(driverLicense).front());//nullptr.front()  ?
+        driver = dbAccess.selectDriver(driverLicense);//nullptr  ?
 
         Bus *bus = new Bus(licensePlate, freeSeatCount, numberOfPassengers, driver, status, seats);
         busV.push_back(*bus);

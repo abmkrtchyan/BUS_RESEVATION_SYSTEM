@@ -96,7 +96,6 @@ People *MainFunctions::signUp() {
     return people;
 }
 
-
 void MainFunctions::selectTrip() {
     printf("\e[1;1H\e[2J If you want to see everything, enter 1, otherwise 0 :-> "); //clean console
     int answer = 0;
@@ -110,7 +109,7 @@ void MainFunctions::selectTrip() {
     }
     printf("\nEnter the required information or enter \"0\":\n");
     printf("Enter trip ID:-> ");
-    int tripId = 0;
+    string tripId;
     std::cin >> tripId;
     printf("Route from:-> ");
     string placeOfDeparture;
@@ -118,7 +117,7 @@ void MainFunctions::selectTrip() {
     printf("Route to:-> ");
     string placeOfArrival;
     std::cin >> placeOfArrival;
-    if (tripId > 0)
+    if (tripId != "0" && !tripId.empty())
         Trip::printTripInfo(dbAccess.selectTrip(tripId));
     else Trip::printTripsInfo(dbAccess.selectTrip(placeOfDeparture, placeOfArrival));
     printf("\n\n\n");
@@ -158,7 +157,7 @@ void MainFunctions::enterTripId() {
 
 void MainFunctions::reserveSeat() {
     printf("\n%s", "Enter trip ID:-> ");
-    int answer;
+    string answer;
     std::cin >> answer;
     JsonDBAccess dbAccess;
     Trip *trip = dbAccess.selectTrip(answer);
@@ -176,7 +175,7 @@ void MainFunctions::reserveSeat() {
             }
         }
     } else {
-        printf("\nTrip by id = %d, does not exist\n", answer);
+        printf("\nTrip by id = %s, does not exist\n", answer.c_str());
         enterTripId();
     }
 }
@@ -314,7 +313,7 @@ void MainFunctions::showMyTrip() {
     printf("\e[1;1H\e[2J");
     JsonDBAccess dbAccess;
     auto *driver = dynamic_cast<Driver *>(people);
-    vector<Trip> trips = dbAccess.selectTrip(driver->getDriversLicense());
+    vector<Trip> trips = dbAccess.selectTripForDriver(driver->getDriversLicense());
     for (const auto &trip:trips) {
         Trip::printTripInfo(&trip);
         trip.getBus()->printAll();

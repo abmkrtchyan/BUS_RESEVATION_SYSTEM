@@ -14,13 +14,13 @@ using std::vector;
 
 class IDataBaseAccess {
 public:
-    virtual Trip *selectTrip(int idTrip) = 0;
+    virtual Trip *selectTrip(string idTrip) = 0;
 
     virtual vector<Trip> selectTrip(string _placeOfDeparture, string _placeOfArrival = "") = 0;
 
     virtual vector<Trip> selectTrip() = 0;
 
-    virtual vector<Trip> selectTrip(string driverLicenseNumber) = 0;
+    virtual vector<Trip> selectTripForDriver(string driverLicenseNumber) = 0;
 
     virtual bool insertTrip(Trip *newTrip) = 0;
 
@@ -32,7 +32,7 @@ public:
 
     virtual bool insertPeople(People *newPeople) = 0;
 
-    virtual vector<Driver> selectDriver(string idDriver) = 0; //passport
+    virtual Driver *selectDriver(string idDriver) = 0; //passport
 
     virtual bool insertDriver(Driver *newDriver) = 0;
 
