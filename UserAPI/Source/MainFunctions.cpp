@@ -92,7 +92,7 @@ People *MainFunctions::signUp() {
     std::cin >> passportNumber; // Որ string եմ տալիս cin printf սխալ են աշխատում
     people = new People(peopleName, passportNumber);
     JsonDBAccess dbAccess;
-    dbAccess.insertPeople(*people);
+    dbAccess.insertPeople(people);
     return people;
 }
 
@@ -168,7 +168,7 @@ void MainFunctions::reserveSeat() {
         bus->print();
         int seatNumber = chooseSeatNumber();
         if (bus->reserveSeat(seatNumber, people)) {
-            if (dbAccess.insertTrip(*trip)) {
+            if (dbAccess.insertTrip(trip)) {
                 printf("\e[1;1H\e[2J");
                 printf("\n Seat with number N%d reserved!\n", seatNumber);
                 Trip::printTripInfo(trip);
@@ -220,7 +220,7 @@ void MainFunctions::becomeDriver() {
     auto *driver = new Driver(people->getName(), people->getPassportId(), answer);
     people = driver;
     JsonDBAccess dbAccess;
-    if (dbAccess.insertDriver(*driver)) {
+    if (dbAccess.insertDriver(driver)) {
         printDriverTools();
     } else {
         printf("\n%s\n", "The attempt failed, please check the accuracy of the data and try again later");
@@ -300,7 +300,7 @@ void MainFunctions::registerTrip() {
 
     Trip *trip = new Trip("NULL", placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
     JsonDBAccess dbAccess;
-    if (dbAccess.insertTrip(*trip)) {
+    if (dbAccess.insertTrip(trip)) {
         printf("\nTrip registered!\n");
         printDriverTools();
     } else {

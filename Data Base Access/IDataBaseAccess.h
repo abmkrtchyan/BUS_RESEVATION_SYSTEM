@@ -22,19 +22,19 @@ public:
 
     virtual vector<Trip> selectTrip(string driverLicenseNumber) = 0;
 
-    virtual bool insertTrip(Trip newTrip) = 0;
+    virtual bool insertTrip(Trip *newTrip) = 0;
 
-    virtual void deleteTrip(int idTrip) = 0;
+    virtual void deleteTrip(string idTrip) = 0;
 
-    virtual void updateTrip(int idTrip, Trip newTrip) = 0;
+    virtual void updateTrip(string idTrip, Trip newTrip) = 0;
 
     virtual People *selectPeople(string passportNum) = 0;
 
-    virtual void insertPeople(People newPeople) = 0;
+    virtual bool insertPeople(People *newPeople) = 0;
 
     virtual vector<Driver> selectDriver(string idDriver) = 0; //passport
 
-    virtual bool insertDriver(Driver newDriver) = 0;
+    virtual bool insertDriver(Driver *newDriver) = 0;
 
     virtual void deleteDriver(string idDriver) = 0;
 

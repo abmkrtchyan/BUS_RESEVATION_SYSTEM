@@ -5,12 +5,18 @@
 #include "JsonDBAccess.h"
 #include "../../BaseClasses/Header/Trip.h"
 #include <ctime>
+#include <fstream>
+#include <iomanip>
 
 //auto it = std::find_if(things.begin(), things.end(), [](const Thing &t) { return t.a == 2; });
 
+const char *JsonDBAccess::tripDirectoryPath = "../JsonDB/trip.json";
+const char *JsonDBAccess::busDirectoryPath = "../JsonDB/bus.json";
+const char *JsonDBAccess::driverDirectoryPath = "../JsonDB/driver.json";
+const char *JsonDBAccess::peopleDirectoryPath = "../JsonDB/people.json";
 
 Trip *JsonDBAccess::selectTrip(int idTrip) {
-    
+
     return nullptr;
 }
 
@@ -22,21 +28,46 @@ vector<Trip> JsonDBAccess::selectTrip(string driverLicenseNumber) {
     return vector<Trip>();
 }
 
-
 vector<Trip> JsonDBAccess::selectTrip() {
     return vector<Trip>();
 }
 
-bool JsonDBAccess::insertTrip(Trip newTrip) {
+bool JsonDBAccess::insertTrip(Trip *newTrip) {
+    json trip{};
+    json answer = json::array();
+    tripToJson(trip, *newTrip);
+    readFromJsonFile(answer, tripDirectoryPath);
+    newTrip->setID(newTrip->getDepartureTime() + newTrip->getBus()->getLicensePlate());//set ID for trip
+    for (const auto &element : answer) {
+        if (element["PASSPORT_ID"] == newTrip->getId())
+            return false;
+    }
+    answer.push_back(trip);
+    writeInJsonFile(answer, tripDirectoryPath);
     return true;
 }
 
-void JsonDBAccess::deleteTrip(int idTrip) {
-
+void JsonDBAccess::deleteTrip(string idTrip) {
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, tripDirectoryPath);
+    for (const auto &element : read)
+        if (element["ID"] != idTrip)
+            answer.push_back(element);
+    writeInJsonFile(answer, tripDirectoryPath);
 }
 
-void JsonDBAccess::updateTrip(int idTrip, Trip newTrip) {
-
+void JsonDBAccess::updateTrip(string idTrip, Trip newTrip) {
+    json trip{};
+    tripToJson(trip, newTrip);
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, tripDirectoryPath);
+    for (const auto &element : read)
+        if (element["ID"] != idTrip)
+            answer.push_back(element);
+        else answer.push_back(trip);
+    writeInJsonFile(answer, tripDirectoryPath);
 }
 
 People *JsonDBAccess::selectPeople(string passportNum) {
@@ -44,24 +75,59 @@ People *JsonDBAccess::selectPeople(string passportNum) {
     return driver;
 }
 
-void JsonDBAccess::insertPeople(People newPeople) {
-    json people;
+bool JsonDBAccess::insertPeople(People *newPeople) {
+    json people{};
+    json answer = json::array();
+    peopleToJson(people, *newPeople);
+    readFromJsonFile(answer, peopleDirectoryPath);
+    for (const auto &element : answer) {
+        if (element["PASSPORT_ID"] == newPeople->getPassportId())
+            return false;
+    }
+    answer.push_back(people);
+    writeInJsonFile(answer, peopleDirectoryPath);
+    return true;
 }
 
 vector<Driver> JsonDBAccess::selectDriver(string idDriver) {
     return vector<Driver>();
 }
 
-bool JsonDBAccess::insertDriver(Driver newDriver) {
+bool JsonDBAccess::insertDriver(Driver *newDriver) {
+    json driver{};
+    json answer = json::array();
+    driverToJson(driver, *newDriver);
+    readFromJsonFile(answer, driverDirectoryPath);
+    for (const auto &element : answer) {
+        if (element["DRIVERS_LICENSE"] == newDriver->getDriversLicense())
+            return false;
+    }
+    answer.push_back(driver);
+    writeInJsonFile(answer, driverDirectoryPath);
     return true;
 }
 
 void JsonDBAccess::deleteDriver(string idDriver) {
-
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, driverDirectoryPath);
+    for (const auto &element : read)
+        if (element["DRIVERS_LICENSE"] != idDriver)
+            answer.push_back(element);
+    writeInJsonFile(answer, driverDirectoryPath);
 }
 
 void JsonDBAccess::updateDriver(string idDriver, Driver newDriver) {
-
+    json driver{};
+    driverToJson(driver, newDriver);
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, driverDirectoryPath);
+    for (const auto &element : read)
+        if (element["DRIVERS_LICENSE"] != idDriver)
+            answer.push_back(element);
+        else answer.push_back(driver);
+    writeInJsonFile(answer, driverDirectoryPath);
 }
 
 vector<Bus> JsonDBAccess::selectBus(string licensePlate) {
@@ -77,15 +143,41 @@ vector<Bus> JsonDBAccess::selectBus(bool freeBuses) {
 }
 
 bool JsonDBAccess::insertBus(Bus newBus) {
+    json bus{};
+    json answer = json::array();
+    busToJson(bus, newBus);
+    readFromJsonFile(answer, busDirectoryPath);
+    for (const auto &element : answer) {
+        if (element["LICENSE_PLATE"] == newBus.getLicensePlate())
+            return false;
+    }
+    answer.push_back(bus);
+    writeInJsonFile(answer, busDirectoryPath);
     return true;
+
 }
 
 void JsonDBAccess::deleteBus(string licensePlateBus) {
-
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, busDirectoryPath);
+    for (const auto &element : read)
+        if (element["LICENSE_PLATE"] != licensePlateBus)
+            answer.push_back(element);
+    writeInJsonFile(answer, busDirectoryPath);
 }
 
 void JsonDBAccess::updateBus(string licensePlateBus, Bus newBus) {
-
+    json bus{};
+    busToJson(bus, newBus);
+    json read = json::array();
+    json answer = json::array();
+    readFromJsonFile(read, busDirectoryPath);
+    for (const auto &element : read)
+        if (element["LICENSE_PLATE"] != licensePlateBus)
+            answer.push_back(element);
+        else answer.push_back(bus);
+    writeInJsonFile(answer, busDirectoryPath);
 }
 
 void JsonDBAccess::tripToJson(json &jsn, const Trip &trip) {
@@ -218,5 +310,30 @@ void JsonDBAccess::busFromJson(const json &jsn, vector<Bus> &busV) {
 
         Bus *bus = new Bus(licensePlate, freeSeatCount, numberOfPassengers, driver, status, seats);
         busV.push_back(*bus);
+    }
+}
+
+void JsonDBAccess::readFromJsonFile(json &jsn, const char *phat) {
+    std::ifstream i(phat);
+    json allJson = {};
+    if (i.is_open()) {
+        i >> allJson;
+        i.close();
+    } else {
+        throw std::runtime_error("Cannot open istream file: " + string(phat));
+    }
+    jsn.clear();
+    for (const auto &element : allJson) {
+        jsn.push_back(element);
+    }
+}
+
+void JsonDBAccess::writeInJsonFile(const json &jsn, const char *phat) {
+    std::ofstream o(phat);
+    if (o.is_open()) {
+        o << std::setw(4) << jsn << std::endl;
+        o.close();
+    } else {
+        throw std::runtime_error("Cannot open file: " + string(phat));
     }
 }

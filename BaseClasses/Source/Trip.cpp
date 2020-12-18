@@ -5,7 +5,8 @@
 #include "../Header/Trip.h"
 #include <utility>
 
-Trip::Trip(string id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime, Bus *bus,
+Trip::Trip(string id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
+           Bus *bus,
            const string &status)
         : _id(std::move(id)),
           _placeOfDeparture(std::move(placeOfDeparture)),
@@ -27,6 +28,10 @@ Trip::Trip(const Trip &oldTrip) {
 
 string Trip::getId() const {
     return _id;
+}
+
+void Trip::setID(string newID) {
+    this->_id = std::move(newID);
 }
 
 string Trip::getDepartureTime() const {

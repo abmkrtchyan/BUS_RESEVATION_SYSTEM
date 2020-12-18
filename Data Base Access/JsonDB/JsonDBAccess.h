@@ -13,6 +13,11 @@
 using json = nlohmann::json;
 
 class JsonDBAccess : public IDataBaseAccess {
+private:
+    const static char *tripDirectoryPath;
+    const static char *busDirectoryPath;
+    const static char *peopleDirectoryPath;
+    const static char *driverDirectoryPath;
 public:
     Trip *selectTrip(int idTrip) override;
 
@@ -22,19 +27,19 @@ public:
 
     vector<Trip> selectTrip(string driverLicenseNumber) override;
 
-    bool insertTrip(Trip newTrip) override;
+    bool insertTrip(Trip *newTrip) override;
 
-    void deleteTrip(int idTrip) override;
+    void deleteTrip(string idTrip) override;
 
-    void updateTrip(int idTrip, Trip newTrip) override;
+    void updateTrip(string idTrip, Trip newTrip) override;
 
     People *selectPeople(string passportNum) override; //passport
 
-    void insertPeople(People newPeople) override;
+    bool insertPeople(People *newPeople) override;
 
     vector<Driver> selectDriver(string idDriver) override; //passport
 
-    bool insertDriver(Driver newDriver) override;
+    bool insertDriver(Driver *newDriver) override;
 
     void deleteDriver(string idDriver) override;
 
@@ -68,6 +73,9 @@ public:
 
     static void busFromJson(const json &jsonFile, vector<Bus> &busV);
 
+    static void writeInJsonFile(const json &jsn, const char *phat);
+
+    static void readFromJsonFile(json &jsn, const char *phat);
 };
 
 

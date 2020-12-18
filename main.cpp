@@ -1,5 +1,6 @@
 
 #include <fstream>
+#include <iomanip>
 #include "UserAPI/Header/MainFunctions.h"
 #include "BaseClasses/Header/Driver.h"
 #include "nlohmann/json.hpp"
@@ -17,42 +18,41 @@ int main() {
        while (true) {
            MainFunctions::mainOptionsPrint();
        }*/
+    JsonDBAccess dbAccess;
+    auto people1 = new Driver("ABO", "123456", "78901");
+    dbAccess.deleteDriver("7890");
 
-/*
-    ///////////////////////////////////////////////////////////////
+   /* ///////////////////////////////////////////////////////////////
 
-    json j8 = R"([
-  { "op": "replace", "path": "/baz", "value": "boo" },
-  { "op": "add", "path": "/hello", "value": ["world"] },
-  { "op": "remove", "path": "/foo"}
-])"_json;
-
-    std::ofstream o("../JsonDB/Trip.json");
+    json j8 = R"( {"cdcd": {
+       "op": "replace",
+       "path": "/baz",
+       "value": "boo"
+     }})"_json;
+    vector<json> alljSon;
+    std::ifstream i("../JsonDB/Trip.json");
+    if (i.is_open()) {
+        json j;
+        i >> j;
+        std::cout << j << std::endl;
+        *//* while (i.good()) {
+          json j;
+          i >> j;
+          alljSon.push_back(j);
+      }*//*
+        i.close();
+    } else {
+        throw std::runtime_error("Cannot open istream file");
+    }
+    alljSon.push_back(j8);
+    std::ofstream o("../JsonDB/Trip.json", std::ofstream ::app);
     if (o.is_open()) {
-        o << j8 << std::endl;
+        o << std::setw(4) <<
+          alljSon << std::endl;
         o.close();
     } else {
         throw std::runtime_error("Cannot open file");
     }
-    vector<json> alljSon;
-    std::ifstream i("../JsonDB/Trip.json");
-    if (i.is_open()) {
-        std::cout << "123";
-        json j;
-        i >> j;
-        alljSon.push_back(j);
-        *//*while (i.good()) {
-            json j;
-            i >> j;
-            alljSon.push_back(j);
-        }*//*
-        i.close();
-    } else {
-        throw std::runtime_error("Cannot open istream file");
-    }*/
-    string s = "xsxxsxsx";
-    char *ss = &s[0];
-    std::cout << ss;
-    vector<string> v;
+*/
 }
 
