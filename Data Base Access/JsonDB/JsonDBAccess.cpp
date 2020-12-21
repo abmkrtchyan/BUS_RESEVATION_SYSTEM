@@ -57,17 +57,17 @@ vector<Trip> JsonDBAccess::selectTrip() {
 }
 
 bool JsonDBAccess::insertTrip(Trip *newTrip) {
-    json trip{};
-    json answer = json::array();
-    tripToJson(trip, *newTrip);
-    readFromJsonFile(answer, tripDirectoryPath);
     newTrip->setID(newTrip->getDepartureTime() + newTrip->getBus()->getLicensePlate());//set ID for trip
-    for (const auto &element : answer) {
+    json trip{};
+    json insertJson = json::array();
+    tripToJson(trip, *newTrip);
+    readFromJsonFile(insertJson, tripDirectoryPath);
+    for (const auto &element : insertJson) {
         if (element["ID"] == newTrip->getId())
             return false;
     }
-    answer.push_back(trip);
-    writeInJsonFile(answer, tripDirectoryPath);
+    insertJson.push_back(trip);
+    writeInJsonFile(insertJson, tripDirectoryPath);
     return true;
 }
 
@@ -143,7 +143,7 @@ bool JsonDBAccess::insertDriver(Driver *newDriver) {
     readFromJsonFile(answer, driverDirectoryPath);
     for (const auto &element : answer) {
         if (element["DRIVERS_LICENSE"] == newDriver->getDriversLicense())
-            return false;
+            return true;
     }
     answer.push_back(driver);
     writeInJsonFile(answer, driverDirectoryPath);
@@ -315,7 +315,7 @@ void JsonDBAccess::tripFromJson(const json &jsn, vector<Trip> &tripV) {
         JsonDBAccess dbAccess;
         bus = &(dbAccess.selectBus(busId).front()); //nullptr?
 
-        Trip *trip = new Trip(id, placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus, status);
+        Trip *trip = new Trip(id, placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus, &status[0]);
         tripV.push_back(*trip);
     }
 }

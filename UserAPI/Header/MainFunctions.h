@@ -11,7 +11,7 @@
 #include "../../BaseClasses/Header/People.h"
 #include "../../BaseClasses/Header/Trip.h"
 
-extern People *people;
+extern People *peopleUser;
 using std::vector;
 
 class MainFunctions {

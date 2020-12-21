@@ -1,1 +1,20 @@
-{}
+[
+    {
+        "ARRIVAL_TIME": "20:11 12.12.2020",
+        "DEPARTURE_TIME": "20:11 12.12.2020",
+        "ID": "NULL",
+        "ID_BUS": "asdf",
+        "PLACE_ARRIVAL": "qwer",
+        "PLACE_DEPARTURE": "qwer",
+        "STATUS": "planned"
+    },
+    {
+        "ARRIVAL_TIME": "09:30 12.12.2020",
+        "DEPARTURE_TIME": "08:00 12.12.2020",
+        "ID": "08:00 12.12.202035cm863",
+        "ID_BUS": "35cm863",
+        "PLACE_ARRIVAL": "Erevan",
+        "PLACE_DEPARTURE": "Hrazdan",
+        "STATUS": "planned"
+    }
+]

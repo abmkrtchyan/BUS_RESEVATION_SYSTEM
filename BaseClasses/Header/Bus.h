@@ -29,7 +29,7 @@ class Bus {
             this->_people = oldSeat._people;
         }
 
-        ~Seat() { delete _people; };
+        ~Seat() = default;
     };
 
 private:

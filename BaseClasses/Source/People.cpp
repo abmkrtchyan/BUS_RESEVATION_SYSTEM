@@ -19,6 +19,7 @@ People::People(string name, string passportNumber) {
 People::People(const People &oldPeople) {
     this->_passportId = oldPeople._passportId;
     this->_name = oldPeople._name;
+
 }
 
 string People::getName() const {

@@ -8,7 +8,7 @@
 #include <ctime>
 #include <iomanip>
 
-People *people = nullptr;
+People *peopleUser = nullptr;
 
 void MainFunctions::beginPrint() {
     printf("\e[1;1H\e[2J");
@@ -51,26 +51,26 @@ void MainFunctions::mainOptions() {
 }
 
 People *MainFunctions::logOrReg(int answer) {
-    people = nullptr;
+    peopleUser = nullptr;
     switch (answer) {
         case 1:
-            people = login();
+            peopleUser = login();
             break;
         case 2:
-            people = signUp();
+            peopleUser = signUp();
             break;
         case 0:
             exit(0);
         default:
-            while (people == nullptr) {
+            while (peopleUser == nullptr) {
                 printf("%s\n", "Incorrect choice. Please select again");
                 std::cin >> answer;
-                people = logOrReg(answer);
+                peopleUser = logOrReg(answer);
             }
             break;
 
     }
-    return people;
+    return peopleUser;
 }
 
 People *MainFunctions::login() {
@@ -90,10 +90,10 @@ People *MainFunctions::signUp() {
     std::cin >> peopleName;
     printf("%s: ", " Please, enter your passport number");
     std::cin >> passportNumber; // Որ string եմ տալիս cin printf սխալ են աշխատում
-    people = new People(peopleName, passportNumber);
+    peopleUser = new People(peopleName, passportNumber);
     JsonDBAccess dbAccess;
-    dbAccess.insertPeople(people);
-    return people;
+    dbAccess.insertPeople(peopleUser);
+    return peopleUser;
 }
 
 void MainFunctions::selectTrip() {
@@ -166,7 +166,7 @@ void MainFunctions::reserveSeat() {
         Bus *bus = trip->getBus();
         bus->print();
         int seatNumber = chooseSeatNumber();
-        if (bus->reserveSeat(seatNumber, people)) {
+        if (bus->reserveSeat(seatNumber, peopleUser)) {
             if (dbAccess.insertTrip(trip)) {
                 printf("\e[1;1H\e[2J");
                 printf("\n Seat with number N%d reserved!\n", seatNumber);
@@ -216,10 +216,10 @@ void MainFunctions::becomeDriver() {
     printf("Pleas enter your driver's license number:--> ");
     string answer;
     std::cin >> answer;
-    auto *driver = new Driver(people->getName(), people->getPassportId(), answer);
-    people = driver;
+    auto *driver = new Driver(peopleUser->getName(), peopleUser->getPassportId(), answer);
     JsonDBAccess dbAccess;
     if (dbAccess.insertDriver(driver)) {
+        peopleUser = driver;
         printDriverTools();
     } else {
         printf("\n%s\n", "The attempt failed, please check the accuracy of the data and try again later");
@@ -252,7 +252,7 @@ void MainFunctions::driverTools() {
             case 3:
                 mainOptionsPrint(); //Back
                 return;
-            case 4:
+            case 0:
                 exit(0); // Exit
             default:
                 printf("%s\n:--> ", "Incorrect choice. Please select again");
@@ -269,15 +269,17 @@ void MainFunctions::registerTrip() {
     printf("\nEnter the number of passenger seats:--> ");
     int numPasSeat;
     std::cin >> numPasSeat;
-    printf("\nEnter the name of the starting point of the route:--> ");
-    auto *driver = dynamic_cast<Driver *>(people);
+
+    auto *driver = dynamic_cast<Driver *>(peopleUser);
     Bus *bus = new Bus(licensePlate, numPasSeat, driver);
 
+    printf("\nEnter the name of the starting point of the route:--> ");
     string placeOfDeparture;
     std::cin >> placeOfDeparture;
     printf("\nEnter the name of the destination of the route:--> ");
     string placeOfArrival;
     std::cin >> placeOfArrival;
+
     printf("\nEnter the start time of the trip in the format 'HH:MM DD.MM.YYYY':--> ");
     struct std::tm timeInfo{};
     std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
@@ -288,18 +290,20 @@ void MainFunctions::registerTrip() {
     time_t departureTime = mktime(&timeInfo);
 
     printf("\nEnter the arrival time of the trip in the format 'HH:MM' DD.MM.YYYY:--> ");
-    std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y");
+    struct std::tm timeInfo1{};
+    std::cin >> std::get_time(&timeInfo1, "%H:%M %d.%m.%Y");
     if (std::cin.fail()) {
         std::cout << "Error reading time\nEnter again:--> ";
         exit(1);
 
         //std::cin >> std::get_time(&timeInfo, "%H:%M %d.%m.%Y"); // MM:HH DD:MM:YYYY
     }
-    time_t arrivalTime = mktime(&timeInfo);
+    time_t arrivalTime = mktime(&timeInfo1);
 
     Trip *trip = new Trip("NULL", placeOfDeparture, placeOfArrival, departureTime, arrivalTime, bus);
     JsonDBAccess dbAccess;
-    if (dbAccess.insertTrip(trip)) {
+
+    if (dbAccess.insertTrip(trip) && dbAccess.insertBus(*bus)) {
         printf("\nTrip registered!\n");
         printDriverTools();
     } else {
@@ -312,7 +316,7 @@ void MainFunctions::registerTrip() {
 void MainFunctions::showMyTrip() {
     printf("\e[1;1H\e[2J");
     JsonDBAccess dbAccess;
-    auto *driver = dynamic_cast<Driver *>(people);
+    auto *driver = dynamic_cast<Driver *>(peopleUser);
     vector<Trip> trips = dbAccess.selectTripForDriver(driver->getDriversLicense());
     for (const auto &trip:trips) {
         Trip::printTripInfo(&trip);

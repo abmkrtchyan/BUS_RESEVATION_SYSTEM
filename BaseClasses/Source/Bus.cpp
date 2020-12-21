@@ -39,8 +39,9 @@ Bus::Bus(string licensePlate, int freeSeatCount, int numberOfPassengers, Driver 
     for (auto &seat:seats) {
         _seats[index]._seatNumber = seat.first;
         _seats[index]._isFree = seat.second.second;
-        _seats[index]._people = new People(*seat.second.first);
-
+        if (seat.second.first != nullptr)
+            _seats[index]._people = new People(*seat.second.first);
+        else _seats[index]._people = nullptr;
         index++;
     }
 }
@@ -121,10 +122,11 @@ void Bus::printAll() {
     printf("%-12s %-12s %-20s %-20s\n", "SEAT NUMBER", "STATUS", "PEOPLE PASSPORT", "NAME");
 
     for (int i = 0; i < _numberOfPassengers; ++i) {
-        printf("%-12d %-12s %-20s %-20s\n", _seats[i]._seatNumber,
-               _seats->_isFree ? "Free" : "Busy",
-               _seats[i]._people->getPassportId().c_str(),
-               _seats->_people->getName().c_str());
+        printf("%-12d %-12s %-20s %-20s\n",
+               _seats[i]._seatNumber,
+               _seats[i]._isFree ? "Free" : "Busy",
+               _seats[i]._isFree ? _seats[i]._people->getPassportId().c_str() : "",
+               _seats[i]._isFree ? _seats->_people->getName().c_str() : "");
     }
 }
 

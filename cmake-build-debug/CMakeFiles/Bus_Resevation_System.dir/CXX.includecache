@@ -1,0 +1,32 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/Bus.h
+string
+-
+map
+-
+People.h
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/People.h
+Driver.h
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/Driver.h
+
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/Driver.h
+People.h
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/People.h
+
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/People.h
+string
+-
+
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Source/Bus.cpp
+../Header/Bus.h
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/BaseClasses/Header/Bus.h
+utility
+-
+

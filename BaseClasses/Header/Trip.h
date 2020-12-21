@@ -27,7 +27,7 @@ public:
     Trip();
 
     Trip(string id, string placeOfDeparture, string placeOfArrival, time_t departureTime, time_t arrivalTime,
-         Bus *bus, const string &status = "planned");
+         Bus *bus, const char* status = "planned");
 
     Trip(const Trip &oldTrip);
 
@@ -57,7 +57,7 @@ public:
 
     static void printTripInfo(const Trip *trip);
 
-    Status returnStatus(const string &status);
+    static Status returnStatus(const string &status);
 
     ~Trip();
 

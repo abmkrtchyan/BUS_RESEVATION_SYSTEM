@@ -1,0 +1,3 @@
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/abmkrtchyan/CLionProjects/Bus_Resevation_System/cmake-build-debug/CMakeFiles/Bus_Resevation_System.dir
